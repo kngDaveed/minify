@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import History from '../components/History';
+import History from "../components/History";
 
 function MinifyForm() {
   const [longUrl, setLongUrl] = useState("");
@@ -7,7 +7,8 @@ function MinifyForm() {
   const [copied, setCopied] = useState(false);
   const [history, setHistory] = useState([]);
 
-  const apiUrl = import.meta.env.VITE_API_URL;
+  // const apiUrl = import.meta.env.VITE_API_URL;
+  const apiUrl = "/api/shorten"; // Vercel auto handles this in same domain
 
   // Load from local storage on first mount
   useEffect(() => {
@@ -16,10 +17,17 @@ function MinifyForm() {
   }, []);
 
   const handleShorten = async () => {
+    // const res = await fetch(apiUrl, {
+    //   method: "POST",
+    //   headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    //   body: new URLSearchParams({ url: longUrl.trim() }),
+    // });
     const res = await fetch(apiUrl, {
       method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams({ url: longUrl.trim() }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ url: longUrl.trim() }),
     });
 
     const data = await res.json();
@@ -41,7 +49,10 @@ function MinifyForm() {
   };
 
   return (
-    <div id="minify" className="flex flex-col lg:flex-row items-start justify-center py-12 px-4 bg-white gap-12">
+    <div
+      id="minify"
+      className="flex flex-col lg:flex-row items-start justify-center py-12 px-4 bg-white gap-12"
+    >
       <div className="bg-white shadow-md border border-gray-200 rounded-xl p-4 md:p-8 w-full max-w-xl">
         <h1 className="text-xl md:text-2xl font-bold mb-4 text-blue-800">
           Minify Your Long URL
