@@ -88,13 +88,13 @@ function MinifyForm() {
                 href={shortUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-blue-600 underline truncate"
+                className="text-blue-600 underline truncate border border-gray-200 rounded-md p-2"
               >
                 {shortUrl}
               </a>
               <button
                 onClick={copyToClipboard}
-                className="ml-2 text-sm text-blue-500 hover:text-blue-700"
+                className="w-full rounded-md transition  text-white py-3 hover:bg-blue-700 bg-blue-600"
               >
                 {copied ? "Copied!" : "Copy"}
               </button>
