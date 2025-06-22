@@ -14,17 +14,17 @@ const steps = [
   {
     icon: MessageSquare,
     title: "Copy Link",
-    description: "Initial meeting to discuss your project requirements, goals, timeline, and budget."
+    description: "Upload your long URL to begin. This is the original link you want to simplify for easier sharing."
   },
   {
     icon: FileSearch,
     title: "Paste & Shorten",
-    description: "This helps you store URL in the database & a shorter id is created for you that pings the longer id when ever its clicked or routed to"
+    description: "The system pings your long URL as you get a shorter version that redirects to it when clicked."
   },
   {
     icon: Glasses,
     title: "Copy Shortened Link",
-    description: "Creation of wireframes and visual designs based on the research findings and your feedback."
+    description: "Copy your new short link with one click and share it anywhere—messaging apps, emails, or social media."
   },
 
 ];

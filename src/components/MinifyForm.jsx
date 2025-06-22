@@ -63,7 +63,7 @@ function MinifyForm() {
 
         <input
           type="text"
-          className="w-full px-4 py-3 border rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="w-full px-5 py-3 border rounded-full mb-4 focus:outline-none focus:ring-2 focus:ring-blue-400"
           placeholder="https://example.com/very/long/link"
           value={longUrl}
           onChange={(e) => setLongUrl(e.target.value)}
@@ -71,7 +71,7 @@ function MinifyForm() {
 
         <button
           onClick={handleShorten}
-          className="w-full bg-blue-600 text-white py-3 rounded-md hover:bg-blue-700 transition"
+          className="w-full border-2 border-blue-700 hover:border-blue-900 bg-blue-600 text-white py-[10px] rounded-full hover:bg-blue-700 transition"
         >
           Shorten It!
         </button>

@@ -103,7 +103,7 @@ export default function Navbar() {
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled
-          ? "bg-white shadow-sm py-4"
+          ? "bg-white shadow-sm py-3"
           : "bg-transparent py-5"
       }`}
     >
@@ -123,16 +123,16 @@ export default function Navbar() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5 }}
-              className="text-xl text-gray-900 flex items-center gap-1"
+              className="text-xl flex items-center gap-1"
             >
               <img src="/icons/minify.png" alt="Minify Logo" className=" w-6 h-6" /> 
-               <span className="font-semibold text-blue-900">Minify</span>
+               <span className={`font-semibold ${isScrolled ? "text-blue-900" : "text-white text-shadow-lg/30"}`}>Minify</span>
             </motion.div>
           </ScrollLink>
 
           {/* Desktop Navigation */}
           <motion.nav
-            className="hidden xl:flex gap-4"
+            className="hidden xl:flex gap-6"
             variants={navVariants}
             initial="hidden"
             animate="visible"
@@ -149,7 +149,7 @@ export default function Navbar() {
                   smooth={true}
                   offset={-70}
                   duration={500}
-                  className={`cursor-pointer text-gray-900 hover:text-blue-600 ${
+                  className={`cursor-pointer transition-all duration-300 ${isScrolled ? "text-gray-900 hover:text-blue-600" : "text-white text-shadow-lg/20 hover:text-shadow-sm/20"} ${
                     activeSection === link.id
                       ? "nav-item-active"
                       : "text-blue-600"
@@ -172,9 +172,9 @@ export default function Navbar() {
               smooth={true}
               offset={-70}
               duration={500}
-              className="w-max bg-blue-600 text-white py-3 px-5 rounded-md flex justify-center hover:bg-blue-700 transition-all duration-300 font-medium items-center cursor-pointer"
+              className="w-max bg-blue-600 text-white py-[10px] px-6 rounded-full flex justify-center border-2 border-blue-700 hover:border-blue-800 hover:bg-blue-700 transition-all duration-300 font-medium items-center cursor-pointer"
             >
-              Contact Developer
+              Developer
               <ArrowRight className="w-4 h-4 ml-2" />
             </ScrollLink>
           </div>
@@ -184,13 +184,13 @@ export default function Navbar() {
 
             <button
               onClick={toggleMobileMenu}
-              className="text-blue-900 hover:text-primary-600"
+              className={`${ isScrolled ? "text-blue-900 hover:text-primary-600" : "text-white text-shadow-lg/20 hover:text-shadow-sm/20"}`}
               aria-label="Toggle mobile menu"
             >
               {mobileMenuOpen ? (
-                <X className="w-6 h-6" />
+                <X size={28} />
               ) : (
-                <Menu className="w-6 h-6" />
+                <Menu size={28} />
               )}
             </button>
           </div>
@@ -280,7 +280,7 @@ export default function Navbar() {
                     smooth={true}
                     offset={-70}
                     duration={500}
-                    className="w-full bg-blue-600 text-white py-3 rounded-md flex justify-center hover:bg-blue-700 transition-all duration-300 font-medium items-center"
+                    className="w-full bg-blue-600 text-white py-3 rounded-full border-2 border-blue-800 flex justify-center hover:bg-blue-800 transition-all duration-300 font-medium items-center"
                     onClick={closeMobileMenu}
                   >
                     Contact Developer

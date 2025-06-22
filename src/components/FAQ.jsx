@@ -60,14 +60,14 @@ export default function FAQ() {
   const isInView = useInView(ref, { once: false, amount: 0.2 });
 
   return (
-    <section id="faqs" className="py-20 bg-gray-50">
+    <section id="faqs" className="py-20 bg-[#FFBE00]">
       <div className="px-4" ref={ref}>
         <div className="text-center">
           <motion.h2
             variants={fadeInUp}
             initial="hidden"
             animate={isInView ? "visible" : "hidden"}
-            className='text-2xl md:text-4xl font-semibold'
+            className='text-2xl md:text-4xl text-shadow-lg/20 text-white font-semibold'
           >
             Frequently Asked Questions
           </motion.h2>
@@ -75,6 +75,7 @@ export default function FAQ() {
             variants={fadeInUp}
             initial="hidden"
             animate={isInView ? "visible" : "hidden"}
+            className='text-white text-shadow-lg/30'
           >
             Answers to common questions
           </motion.p>

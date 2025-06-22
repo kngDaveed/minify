@@ -43,7 +43,7 @@ export default function Contact() {
             animate={isInView ? "visible" : "hidden"}
             className="text-3xl md:text-4xl font-semibold mb-2"
           >
-            Contact Me
+            Lets Connect
           </motion.h2>
           <motion.p
             variants={fadeInRight}
@@ -302,7 +302,7 @@ export default function Contact() {
                   <button
                     type="submit"
                     disabled={state.submitting}
-                    className="w-full bg-blue-600 text-white py-3 px-5 rounded-md flex justify-center hover:bg-blue-700 transition-all duration-300 font-medium items-center cursor-pointer active"
+                    className="w-full border-2 border-blue-700 hover:border-blue-900 bg-blue-600 text-white py-3 px-5 rounded-full flex justify-center hover:bg-blue-700 transition-all duration-300 font-medium items-center cursor-pointer active"
                   >
                     {state.submitting ? (
                       "Sending..."
