@@ -1,6 +1,7 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import tailwindcss from '@tailwindcss/vite'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import tailwindcss from '@tailwindcss/vite';
+import htmlMeta from 'vite-plugin-html-meta';
 
 export default defineConfig({
   plugins: [
@@ -73,6 +74,15 @@ export default defineConfig({
         },
       },
     }),
+    htmlMeta({
+      title: 'Minify | Free URL Shortener',
+      description: 'Shorten URLs with ease. Clean, fast, and copy-ready. Built with React + Vite.',
+      image: 'https://miniphy.vercel.app/og-preview.png',
+      url: 'https://miniphy.vercel.app',
+    }),
   ],
-  base: process.env.VITE_BASE_PATH || "/",
-})
+  base: process.env.VITE_BASE_PATH || '/',
+  build: {
+    outDir: 'dist',
+  },
+});
