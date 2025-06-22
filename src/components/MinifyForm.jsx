@@ -31,9 +31,9 @@ function MinifyForm() {
     });
     const data = await response.json();
 
-    console.log('Received body:', req.body);
-
-
+    // ✅ Correct (if you want to log the input or response):
+    console.log("Sent body:", { url: longUrl });
+    console.log("Received data:", data);
 
     setShortUrl(data.result_url);
     setCopied(false);
