@@ -17,11 +17,6 @@ function MinifyForm() {
   }, []);
 
   const handleShorten = async () => {
-    // const res = await fetch(apiUrl, {
-    //   method: "POST",
-    //   headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    //   body: new URLSearchParams({ url: longUrl.trim() }),
-    // });
     const response = await fetch("/api/shorten", {
       method: "POST",
       headers: {
@@ -31,13 +26,15 @@ function MinifyForm() {
     });
     const data = await response.json();
 
-    // ✅ Correct (if you want to log the input or response):
     console.log("Sent body:", { url: longUrl });
     console.log("Received data:", data);
 
     setShortUrl(data.result_url);
     setCopied(false);
     setLongUrl("");
+
+    const exists = history.find((item) => item.shortUrl === data.result_url);
+    if (exists) return;
 
     const updatedHistory = [
       { shortUrl: data.result_url, originalUrl: longUrl },
@@ -104,7 +101,7 @@ function MinifyForm() {
       </div>
 
       <div className="text-center">
-        <History />
+        <History history={history} setHistory={setHistory} />
       </div>
     </div>
   );
