@@ -1,16 +1,11 @@
 import {
   ArrowDown,
-  ArrowRight,
-  History,
+  History as HistoryIcon,
   StepForward,
-  SuperscriptIcon,
 } from "lucide-react";
-import {useState, React} from "react";
+import { useState, useEffect } from "react";
 import { Link as ScrollLink } from "react-scroll";
 import { motion } from "framer-motion";
-
-
-
 
 const bounceTransition = {
   y: {
@@ -22,11 +17,18 @@ const bounceTransition = {
 };
 
 const Hero = () => {
+  const [hasHistory, setHasHistory] = useState(false);
 
-const [history, setHistory] = useState([]); // Your minified links history
-const [showHistory, setShowHistory] = useState(false); // Controls what to display
-
-
+  // Check for history on mount
+  useEffect(() => {
+    const stored = localStorage.getItem("minifyHistory");
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        setHasHistory(true);
+      }
+    }
+  }, []);
 
   return (
     <div
@@ -35,8 +37,7 @@ const [showHistory, setShowHistory] = useState(false); // Controls what to displ
     >
       <div className="flex flex-col gap-6 max-w-3xl text-start">
         <h1 className="text-3xl md:text-4xl font-semibold">
-          Allowing users to shorten long, clunky URLs into clean, shareable
-          links
+          Allowing users to shorten long, clunky URLs into clean, shareable links
         </h1>
 
         <p className="text-lg text-primary-200">
@@ -60,9 +61,8 @@ const [showHistory, setShowHistory] = useState(false); // Controls what to displ
             </motion.div>
           </ScrollLink>
 
-          {history.length > 0 ? (
+          {hasHistory ? (
             <ScrollLink
-              onClick={() => setShowHistory(true)}
               to="history"
               spy={true}
               smooth={true}
@@ -70,11 +70,10 @@ const [showHistory, setShowHistory] = useState(false); // Controls what to displ
               duration={500}
               className="w-full border border-blue-600 py-4 rounded-md text-blue-600 hover:text-white hover:bg-blue-600 font-medium hover:border-blue-800 transition-all duration-300 flex items-center gap-2 justify-center cursor-pointer"
             >
-              View Minify History <History size={16} />
+              View Minify History <HistoryIcon size={16} />
             </ScrollLink>
           ) : (
             <ScrollLink
-              onClick={() => setShowHistory(true)}
               to="minify-guide"
               spy={true}
               smooth={true}
