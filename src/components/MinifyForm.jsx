@@ -7,25 +7,23 @@ function MinifyForm() {
   const [copied, setCopied] = useState(false);
   const [history, setHistory] = useState([]);
 
-  // const apiUrl = import.meta.env.VITE_API_URL;
-  const apiUrl = "/api/shorten"; // Vercel auto handles this in same domain
+  const apiUrl = "/api/shorten";
 
-  // Load from local storage on first mount
   useEffect(() => {
     const stored = localStorage.getItem("minifyHistory");
     if (stored) setHistory(JSON.parse(stored));
   }, []);
 
   const handleShorten = async () => {
-    const response = await fetch("/api/shorten", {
+    const response = await fetch(apiUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ url: longUrl.trim() }),
     });
-    const data = await response.json();
 
+    const data = await response.json();
     console.log("Sent body:", { url: longUrl });
     console.log("Received data:", data);
 
@@ -54,6 +52,7 @@ function MinifyForm() {
       id="minify"
       className="flex flex-col lg:flex-row items-start justify-center py-12 px-4 bg-white gap-12"
     >
+      {/* Left column: Form */}
       <div className="bg-white shadow-md border border-gray-200 rounded-xl p-4 md:p-8 w-full max-w-xl">
         <h1 className="text-xl md:text-2xl font-bold mb-4 text-blue-800">
           Minify Your Long URL
@@ -91,7 +90,7 @@ function MinifyForm() {
               </a>
               <button
                 onClick={copyToClipboard}
-                className="w-max rounded-md transition  text-white py-3 px-4 hover:bg-blue-700 bg-blue-600"
+                className="w-max rounded-md transition text-white py-3 px-4 hover:bg-blue-700 bg-blue-600"
               >
                 {copied ? "Copied!" : "Copy url"}
               </button>
@@ -100,28 +99,30 @@ function MinifyForm() {
         )}
       </div>
 
-      <div className="text-center">
-        <History history={history} setHistory={setHistory} />
+      {/* Right column: History or Guide */}
+      <div className="text-center w-full max-w-md">
+        {history.length > 0 ? (
+          <div id="history">
+            <History history={history} setHistory={setHistory} />
+          </div>
+        ) : (
+          <div id="minify-guide">
+            <div className="bg-blue-50 p-4 rounded-md text-blue-800 text-start">
+              <h2 className="text-lg font-semibold mb-2">🚀 How to Use Minify</h2>
+              <ul className="list-disc pl-5 space-y-1 text-sm">
+                <li>Paste any long URL into the input field above.</li>
+                <li>Click “Shorten It” to instantly get a short link.</li>
+                <li>Copy the link and share it anywhere.</li>
+              </ul>
+            </div>
+            <div className="flex mt-2 p-4 rounded-md shadow-sm text-sm border border-gray-200">
+              Your shortened links will appear here for quick access as "History".
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
 }
 
 export default MinifyForm;
-
-{/* <>
-  <div
-    id="minify-guide"
-    className=" bg-blue-50 p-4 rounded-md text-blue-800 text-start"
-  >
-    <h2 className="text-lg font-semibold mb-2">🚀 How to Use Minify</h2>
-    <ul className="list-disc pl-5 space-y-1 text-sm">
-      <li>Paste any long URL into the input field above.</li>
-      <li>Click “Shorten It” to instantly get a short link.</li>
-      <li>Copy the link and share it anywhere.</li>
-    </ul>
-  </div>
-  <div className="flex mt-2 p-4 rounded-md  shadow-sm text-sm border border-gray-200 ">
-    Your shortened links will appear here for quick access as "History".
-  </div>
-</>; */}
