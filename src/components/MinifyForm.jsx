@@ -83,20 +83,20 @@ function MinifyForm() {
         {shortUrl && (
           <div className="mt-6 text-center">
             <p className="text-green-600 font-medium">✅ Your shortened URL:</p>
-            <div className="flex items-center justify-between bg-gray-100 rounded-md p-3 mt-2">
+            <div className="flex items-center justify-between bg-blue-50 rounded-md p-3 mt-2">
               <a
                 href={shortUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-blue-600 underline truncate border border-gray-200 rounded-md p-2"
+                className="text-blue-600 underline truncate border border-gray-200 rounded-md p-3"
               >
                 {shortUrl}
               </a>
               <button
                 onClick={copyToClipboard}
-                className="w-full rounded-md transition  text-white py-3 hover:bg-blue-700 bg-blue-600"
+                className="w-max rounded-md transition  text-white py-3 px-4 hover:bg-blue-700 bg-blue-600"
               >
-                {copied ? "Copied!" : "Copy"}
+                {copied ? "Copied!" : "Copy url"}
               </button>
             </div>
           </div>
