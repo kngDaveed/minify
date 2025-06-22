@@ -1,0 +1,119 @@
+import { useRef } from 'react';
+import { motion, useInView } from 'framer-motion';
+import { 
+  MessageSquare, 
+  FileSearch, 
+  Code, 
+  Hammer, 
+  Glasses, 
+  Rocket 
+} from 'lucide-react';
+// import { fadeInUp, staggerContainer } from '../../utils/animations';
+
+const steps = [
+  {
+    icon: MessageSquare,
+    title: "Copy Link",
+    description: "Initial meeting to discuss your project requirements, goals, timeline, and budget."
+  },
+  {
+    icon: FileSearch,
+    title: "Paste & Shorten",
+    description: "This helps you store URL in the database & a shorter id is created for you that pings the longer id when ever its clicked or routed to"
+  },
+  {
+    icon: Glasses,
+    title: "Copy Shortened Link",
+    description: "Creation of wireframes and visual designs based on the research findings and your feedback."
+  },
+
+];
+
+// src/utils/animations.js
+
+export const fadeInUp = {
+  hidden: {
+    opacity: 0,
+    y: 40,
+    transition: {
+      duration: 0.4,
+      ease: 'easeOut',
+    },
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.6,
+      ease: 'easeOut',
+    },
+  },
+};
+
+export const staggerContainer = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.2,
+    },
+  },
+};
+
+
+export default function WorkSteps() {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: false, amount: 0.2 });
+
+  return (
+    <section className=" bg-white">
+      <div className="px-4 md:px-12 py-20" ref={ref}>
+        <div className="text-center">
+          <motion.h2
+            variants={fadeInUp}
+            initial="hidden"
+            animate={isInView ? "visible" : "hidden"}
+            className='text-3xl md:text-4xl font-semibold'
+          >
+            How It Works
+          </motion.h2>
+          <motion.p
+            variants={fadeInUp}
+            initial="hidden"
+            animate={isInView ? "visible" : "hidden"}
+          >
+            A simple, effective process to Shorten your links and improve user experience
+          </motion.p>
+        </div>
+
+        <motion.div 
+          variants={staggerContainer}
+          initial="hidden"
+          animate={isInView ? "visible" : "hidden"}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12"
+        >
+          {steps.map((step, index) => {
+            const Icon = step.icon;
+            
+            return (
+              <motion.div
+                key={index}
+                variants={fadeInUp}
+                className="bg-white rounded-xl p-6 shadow-md border border-gray-300 hover:shadow-lg transition-all duration-300"
+              >
+                <div className="bg-blue-100  text-blue-600  rounded-full w-16 h-16 flex items-center justify-center mb-4">
+                  <Icon className="w-8 h-8" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-3">
+                  {step.title}
+                </h3>
+                <p className="text-gray-800">
+                  {step.description}
+                </p>
+              </motion.div>
+            );
+          })}
+        </motion.div>
+      </div>
+    </section>
+  );
+}
