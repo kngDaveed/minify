@@ -10,7 +10,7 @@ const CTA = () => {
       id="cta"
       className="py-20 px-4 md:px-12 relative text-center bg-[#FFBE00]"
     >
-      <div className="grid grid-cols-1 xl:grid-cols-3 items-center">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 items-center gap-6 md:gap-0">
         <div className="flex flex-col text-start gap-2 md:px-4">
           <div className="flex items-center gap-4">
             <img
@@ -19,10 +19,10 @@ const CTA = () => {
             className=" w-10 rounded-md shadow-lg"
           />
           <div>
-            <h1 className=" text-xl font-bold text-white text-shadow-lg/20">
+            <h1 className=" text-xl sm:text-lg lg:text-xl font-bold text-white text-shadow-lg/20">
             Extended Features Updates
           </h1>
-          <p className="text-sm text-white text-shadow-lg/20">QR Code, Custom Slugs, Click Analysis & more</p>
+          <p className="text-sm text-white text-shadow-lg/20">QR Code, Custom Slugs, Click Analysis</p>
           </div>
           </div>
 
@@ -85,7 +85,7 @@ const CTA = () => {
           <img
             src="/images/minify-developer-profile.png"
             alt="developers linkedin profile image"
-            className="w-[250px]"
+            className="md:w-[250px] md:mb-0 mb-8"
           />
             <a
               href="https://techbygodfrey.vercel.app/"
@@ -95,9 +95,22 @@ const CTA = () => {
             >
               Developers Portfolio <ArrowUpRight size={16} />
             </a>
-        </div>
-          <div className="flex gap-4 w-max mx-auto flex-col justify-center md:gap-4 mt-4 md:mt-0">
             <ScrollLink
+              to="contact"
+              spy={true}
+              smooth={true}
+              offset={-100}
+              duration={500}
+              className="w-max md:max-w-lg mx-auto border-2 border-white py-3 px-16 rounded-md bg-white text-blue-800 hover:text-white hover:bg-[#fdc959e8] font-medium hover:border-transparent transition-all duration-300 flex items-center gap-2 justify-center cursor-pointer xl:hidden"
+            >
+              Stay Updated <ArrowUpRight size={16} />
+            </ScrollLink>
+        </div>
+          <div className="gap-4 hidden xl:flex w-max mx-auto flex-col justify-center md:gap-4 mt-4 md:mt-0">
+           
+            <MiniAppIconsGrid />
+
+             <ScrollLink
               to="contact"
               spy={true}
               smooth={true}
@@ -107,7 +120,6 @@ const CTA = () => {
             >
               Stay Updated <ArrowUpRight size={16} />
             </ScrollLink>
-            <MiniAppIconsGrid />
           </div>
       
       </div>

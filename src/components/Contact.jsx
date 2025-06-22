@@ -61,7 +61,7 @@ export default function Contact() {
             initial="hidden"
             animate={isInView ? "visible" : "hidden"}
           >
-            <div className="bg-white border border-gray-200 rounded-xl shadow-md p-6 h-full max-w-[360px]">
+            <div className="bg-white border border-gray-200 rounded-xl shadow-md p-6 h-full md:max-w-[360px]">
               <h3 className="text-xl font-semibold text-gray-900 mb-2">
                 Contact Developer
               </h3>

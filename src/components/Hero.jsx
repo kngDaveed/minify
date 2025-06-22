@@ -35,7 +35,7 @@ const Hero = () => {
       id="home"
       className="h-screen sm:h-[800px] lg:h-[1080px] xl:h-[750px] bg-[url(/images/web.jpg)] bg-center md:bg-top bg-cover bg-no-repeat bg-fixed  flex justify-center md:items-center items-end px-4 sm:px-12"
     >
-      <div className="flex flex-col gap-6 max-w-3xl text-start mb-20 md:mb-0">
+      <div className="flex flex-col gap-6 max-w-3xl text-start mb-32 md:mb-0">
         <h1 className="text-3xl md:text-4xl font-semibold text-white text-shadow-lg/30">
           Allowing users to shorten long, clunky URLs into clean, shareable links
         </h1>
