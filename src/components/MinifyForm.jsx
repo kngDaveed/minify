@@ -1,14 +1,19 @@
-import { useState, react } from "react";
+import React, { useState, useEffect } from "react";
 import History from '../components/History';
-
-
 
 function MinifyForm() {
   const [longUrl, setLongUrl] = useState("");
   const [shortUrl, setShortUrl] = useState("");
   const [copied, setCopied] = useState(false);
+  const [history, setHistory] = useState([]);
 
   const apiUrl = import.meta.env.VITE_API_URL;
+
+  // Load from local storage on first mount
+  useEffect(() => {
+    const stored = localStorage.getItem("minifyHistory");
+    if (stored) setHistory(JSON.parse(stored));
+  }, []);
 
   const handleShorten = async () => {
     const res = await fetch(apiUrl, {
@@ -16,10 +21,18 @@ function MinifyForm() {
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: new URLSearchParams({ url: longUrl.trim() }),
     });
+
     const data = await res.json();
     setShortUrl(data.result_url);
-    // setLongUrl("");
     setCopied(false);
+    setLongUrl("");
+
+    const updatedHistory = [
+      { shortUrl: data.result_url, originalUrl: longUrl },
+      ...history,
+    ];
+    setHistory(updatedHistory);
+    localStorage.setItem("minifyHistory", JSON.stringify(updatedHistory));
   };
 
   const copyToClipboard = () => {
@@ -30,7 +43,7 @@ function MinifyForm() {
   return (
     <div id="minify" className="flex flex-col lg:flex-row items-start justify-center py-12 px-4 bg-white gap-12">
       <div className="bg-white shadow-md border border-gray-200 rounded-xl p-4 md:p-8 w-full max-w-xl">
-        <h1 className="text-xl md:text-2xl font-bold mb-4 text-blue-800 md:text-blue-800">
+        <h1 className="text-xl md:text-2xl font-bold mb-4 text-blue-800">
           Minify Your Long URL
         </h1>
         <p className="text-blue-800 mb-6">
@@ -44,6 +57,7 @@ function MinifyForm() {
           value={longUrl}
           onChange={(e) => setLongUrl(e.target.value)}
         />
+
         <button
           onClick={handleShorten}
           className="w-full bg-blue-600 text-white py-3 rounded-md hover:bg-blue-700 transition"
@@ -72,7 +86,6 @@ function MinifyForm() {
             </div>
           </div>
         )}
-        
       </div>
 
       <div className="text-center">
@@ -81,6 +94,5 @@ function MinifyForm() {
     </div>
   );
 }
+
 export default MinifyForm;
-
-
