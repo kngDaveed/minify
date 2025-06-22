@@ -66,7 +66,7 @@ const Hero = () => {
               to="history"
               spy={true}
               smooth={true}
-              offset={-50}
+              offset={-100}
               duration={500}
               className="w-full border border-blue-600 py-4 rounded-md text-blue-600 hover:text-white hover:bg-blue-600 font-medium hover:border-blue-800 transition-all duration-300 flex items-center gap-2 justify-center cursor-pointer"
             >
