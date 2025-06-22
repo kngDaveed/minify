@@ -22,15 +22,19 @@ function MinifyForm() {
     //   headers: { "Content-Type": "application/x-www-form-urlencoded" },
     //   body: new URLSearchParams({ url: longUrl.trim() }),
     // });
-    const res = await fetch(apiUrl, {
+    const response = await fetch("/api/shorten", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ url: longUrl.trim() }),
     });
+    const data = await response.json();
 
-    const data = await res.json();
+    console.log('Received body:', req.body);
+
+
+
     setShortUrl(data.result_url);
     setCopied(false);
     setLongUrl("");
