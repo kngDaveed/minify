@@ -1,77 +1,128 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import History from "../components/History";
 
-function History({ history, setHistory }) {
-  const [expanded, setExpanded] = useState(false);
+function MinifyForm() {
+  const [longUrl, setLongUrl] = useState("");
+  const [shortUrl, setShortUrl] = useState("");
+  const [copied, setCopied] = useState(false);
+  const [history, setHistory] = useState([]);
 
-  const deleteLink = (shortUrl) => {
-    const updated = history.filter((item) => item.shortUrl !== shortUrl);
-    setHistory(updated);
-    localStorage.setItem("minifyHistory", JSON.stringify(updated));
+  const apiUrl = "/api/shorten";
+
+  useEffect(() => {
+    const stored = localStorage.getItem("minifyHistory");
+    if (stored) setHistory(JSON.parse(stored));
+  }, []);
+
+  const handleShorten = async () => {
+    const response = await fetch(apiUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ url: longUrl.trim() }),
+    });
+
+    const data = await response.json();
+    console.log("Sent body:", { url: longUrl });
+    console.log("Received data:", data);
+
+    setShortUrl(data.result_url);
+    setCopied(false);
+    setLongUrl("");
+
+    const exists = history.find((item) => item.shortUrl === data.result_url);
+    if (exists) return;
+
+    const updatedHistory = [
+      { shortUrl: data.result_url, originalUrl: longUrl },
+      ...history,
+    ];
+    setHistory(updatedHistory);
+    localStorage.setItem("minifyHistory", JSON.stringify(updatedHistory));
   };
 
-  const clearHistory = () => {
-    localStorage.removeItem("minifyHistory");
-    setHistory([]);
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(shortUrl);
+    setCopied(true);
   };
-
-  const visibleLinks = expanded ? history : history.slice(0, 3);
-  const remaining = history.length - 3;
-
-  if (history.length === 0) return null;
 
   return (
-    <div className="bg-white border shadow-md rounded-xl p-4 w-full max-w-md text-left">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-lg font-semibold text-blue-800">Shortened Links</h2>
-        {history.length >= 3 && (
-          <button
-            onClick={clearHistory}
-            className="text-red-500 text-sm hover:underline"
-          >
-            Clear History
-          </button>
+    <div
+      id="minify"
+      className="flex flex-col lg:flex-row items-start justify-center py-12 px-4 bg-white gap-12"
+    >
+      {/* Left column: Form */}
+      <div className="bg-white shadow-md border border-gray-200 rounded-xl p-4 md:p-8 w-full max-w-xl">
+        <h1 className="text-xl md:text-2xl font-bold mb-4 text-blue-800">
+          Minify Your Long URL
+        </h1>
+        <p className="text-blue-800 mb-6">
+          Paste your long URL below and get a short version instantly!
+        </p>
+
+        <input
+          type="text"
+          className="w-full px-4 py-3 border rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          placeholder="https://example.com/very/long/link"
+          value={longUrl}
+          onChange={(e) => setLongUrl(e.target.value)}
+        />
+
+        <button
+          onClick={handleShorten}
+          className="w-full bg-blue-600 text-white py-3 rounded-md hover:bg-blue-700 transition"
+        >
+          Shorten It!
+        </button>
+
+        {shortUrl && (
+          <div className="mt-6 text-center">
+            <p className="text-green-600 font-medium">✅ Your shortened URL:</p>
+            <div className="flex items-center justify-between bg-blue-50 rounded-md p-3 mt-2">
+              <a
+                href={shortUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-600 underline truncate border border-gray-200 rounded-md p-3"
+              >
+                {shortUrl}
+              </a>
+              <button
+                onClick={copyToClipboard}
+                className="w-max rounded-md transition text-white py-3 px-4 hover:bg-blue-700 bg-blue-600"
+              >
+                {copied ? "Copied!" : "Copy url"}
+              </button>
+            </div>
+          </div>
         )}
       </div>
 
-      {visibleLinks.map((item, index) => (
-        <div
-          key={`${item.shortUrl}-${index}`}
-          className="flex justify-between items-center border border-gray-200 rounded-md mb-2 p-2"
-        >
-          <div className="w-3/4">
-            <p className="truncate text-sm text-gray-700">
-              {item.originalUrl}
-            </p>
-            <a
-              href={item.shortUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-600 text-sm hover:underline"
-            >
-              {item.shortUrl}
-            </a>
+      {/* Right column: History or Guide */}
+      <div className="text-center w-full max-w-md">
+        {history.length > 0 ? (
+          <div id="history">
+            <History history={history} setHistory={setHistory} />
           </div>
-          <button
-            onClick={() => deleteLink(item.shortUrl)}
-            className="bg-red-500 text-white px-4 py-3 rounded-md hover:bg-red-600 transition text-xs ml-2"
-          >
-            Delete
-          </button>
-        </div>
-      ))}
-
-      {remaining > 0 && (
-        <div className="mt-2 text-center">
-          <button
-            onClick={() => setExpanded((prev) => !prev)}
-            className="text-blue-600 text-sm hover:underline"
-          >
-            {expanded ? "Show Less" : `+${remaining} more`}
-          </button>
-        </div>
-      )}
+        ) : (
+          <div id="minify-guide">
+            <div className="bg-blue-50 p-4 rounded-md text-blue-800 text-start">
+              <h2 className="text-lg font-semibold mb-2">🚀 How to Use Minify</h2>
+              <ul className="list-disc pl-5 space-y-1 text-sm">
+                <li>Paste any long URL into the input field above.</li>
+                <li>Click “Shorten It” to instantly get a short link.</li>
+                <li>Copy the link and share it anywhere.</li>
+              </ul>
+            </div>
+            <div className="flex mt-2 p-4 rounded-md shadow-sm text-sm border border-gray-200">
+              Your shortened links will appear here for quick access as "History".
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
 
-export default History;
+export default MinifyForm;

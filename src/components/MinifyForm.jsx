@@ -108,3 +108,20 @@ function MinifyForm() {
 }
 
 export default MinifyForm;
+
+{/* <>
+  <div
+    id="minify-guide"
+    className=" bg-blue-50 p-4 rounded-md text-blue-800 text-start"
+  >
+    <h2 className="text-lg font-semibold mb-2">🚀 How to Use Minify</h2>
+    <ul className="list-disc pl-5 space-y-1 text-sm">
+      <li>Paste any long URL into the input field above.</li>
+      <li>Click “Shorten It” to instantly get a short link.</li>
+      <li>Copy the link and share it anywhere.</li>
+    </ul>
+  </div>
+  <div className="flex mt-2 p-4 rounded-md  shadow-sm text-sm border border-gray-200 ">
+    Your shortened links will appear here for quick access as "History".
+  </div>
+</>; */}
