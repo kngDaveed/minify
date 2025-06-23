@@ -98,7 +98,7 @@ export default function WorkSteps() {
               <motion.div
                 key={index}
                 variants={fadeInUp}
-                className="bg-white rounded-xl p-6 shadow-md border border-gray-300 hover:shadow-lg transition-all duration-300"
+                className="bg-white rounded-xl p-6 shadow-md border border-gray-200 hover:shadow-lg transition-all duration-300"
               >
                 <div className="bg-blue-100  text-blue-600  rounded-full w-16 h-16 flex items-center justify-center mb-4">
                   <Icon className="w-8 h-8" />

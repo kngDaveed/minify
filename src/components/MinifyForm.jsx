@@ -63,7 +63,7 @@ function MinifyForm() {
 
         <input
           type="text"
-          className="w-full px-5 py-3 border rounded-full mb-4 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="w-full px-5 py-3 border border-gray-200 rounded-full mb-4 focus:outline-none focus:ring-2 focus:ring-blue-400"
           placeholder="https://example.com/very/long/link"
           value={longUrl}
           onChange={(e) => setLongUrl(e.target.value)}
