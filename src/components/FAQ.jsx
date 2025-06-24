@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 // import { faqs } from '../../data/faqs';
-import { fadeInUp, staggerContainer } from './utils/animations';
+import { fadeInUp, staggerContainer } from '../utils/animations';
 import FAQItem from './ui/FAQItem';
 
 const faqs = [

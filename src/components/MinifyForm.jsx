@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from "react";
 import History from "../components/History";
+import { generateQRCode } from "../utils/qrcode";
 
 function MinifyForm() {
   const [longUrl, setLongUrl] = useState("");
+  const [slug, setSlug] = useState("");
   const [shortUrl, setShortUrl] = useState("");
   const [copied, setCopied] = useState(false);
   const [history, setHistory] = useState([]);
+  const [qr, setQR] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const apiUrl = "/api/shorten";
 
@@ -15,13 +19,20 @@ function MinifyForm() {
   }, []);
 
   const handleShorten = async () => {
+    setIsLoading(true);
     const response = await fetch(apiUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ url: longUrl.trim() }),
+      body: JSON.stringify({ url: longUrl.trim(), slug }),
     });
+
+    if (response.status === 409) {
+      alert("Slug already taken. Please choose another.");
+      setIsLoading(false);
+      return;
+    }
 
     const data = await response.json();
     console.log("Sent body:", { url: longUrl });
@@ -31,15 +42,20 @@ function MinifyForm() {
     setCopied(false);
     setLongUrl("");
 
-    const exists = history.find((item) => item.shortUrl === data.result_url);
-    if (exists) return;
+    const qrCode = await generateQRCode(data.result_url);
+    setQR(qrCode);
 
-    const updatedHistory = [
-      { shortUrl: data.result_url, originalUrl: longUrl },
-      ...history,
-    ];
-    setHistory(updatedHistory);
-    localStorage.setItem("minifyHistory", JSON.stringify(updatedHistory));
+    const exists = history.find((item) => item.shortUrl === data.result_url);
+    if (!exists) {
+      const updatedHistory = [
+        { shortUrl: data.result_url, originalUrl: longUrl },
+        ...history,
+      ];
+      setHistory(updatedHistory);
+      localStorage.setItem("minifyHistory", JSON.stringify(updatedHistory));
+    }
+
+    setIsLoading(false);
   };
 
   const copyToClipboard = () => {
@@ -61,7 +77,10 @@ function MinifyForm() {
           Paste your long URL below and get a short version instantly!
         </p>
 
+        <label htmlFor="long-url" className="sr-only">Long URL</label>
         <input
+          id="long-url"
+          aria-label="Long URL"
           type="text"
           className="w-full px-5 py-3 border border-gray-200 rounded-full mb-4 focus:outline-none focus:ring-2 focus:ring-blue-400"
           placeholder="https://example.com/very/long/link"
@@ -69,31 +88,48 @@ function MinifyForm() {
           onChange={(e) => setLongUrl(e.target.value)}
         />
 
+        <label htmlFor="slug" className="sr-only">Custom Slug</label>
+        <input
+          id="slug"
+          aria-label="Custom Slug"
+          type="text"
+          className="w-full px-5 py-3 border border-gray-200 rounded-full mb-4"
+          placeholder="Optional custom slug (e.g. daniel)"
+          value={slug}
+          onChange={(e) => setSlug(e.target.value)}
+        />
+
         <button
           onClick={handleShorten}
-          className="w-full border-2 border-blue-700 hover:border-blue-900 bg-blue-600 text-white py-[10px] rounded-full hover:bg-blue-700 transition"
+          disabled={isLoading}
+          className={`w-full border-2 border-blue-700 bg-blue-600 text-white py-[10px] rounded-full transition ${
+            isLoading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-700 hover:border-blue-900'
+          }`}
         >
-          Shorten It!
+          {isLoading ? "Processing..." : "Shorten It!"}
         </button>
 
         {shortUrl && (
           <div className="mt-6">
             <p className="text-green-600 font-medium">✅ Your shortened URL:</p>
-            <div className="flex items-center justify-between gap-1 bg-blue-50 rounded-md p-3 mt-2">
-              <a
-                href={shortUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-600 underline truncate border border-gray-200 rounded-md p-3"
-              >
-                {shortUrl}
-              </a>
-              <button
-                onClick={copyToClipboard}
-                className="w-max rounded-md transition text-white text-xs py-3 px-4 hover:bg-blue-700 bg-blue-600"
-              >
-                {copied ? "Copied!" : "Copy"}
-              </button>
+            <div className="flex flex-col gap-2 items-center">
+              <div className="flex items-center justify-between gap-1 bg-blue-50 rounded-md p-3 mt-2">
+                <a
+                  href={shortUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 underline truncate border border-gray-200 rounded-md p-3"
+                >
+                  {shortUrl}
+                </a>
+                <button
+                  onClick={copyToClipboard}
+                  className="w-max rounded-md transition text-white text-xs py-3 px-4 hover:bg-blue-700 bg-blue-600"
+                >
+                  {copied ? "Copied!" : "Copy"}
+                </button>
+              </div>
+              <img src={qr} alt="QR Code" className="min-w-16 min-h-16" />
             </div>
           </div>
         )}

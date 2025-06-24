@@ -8,7 +8,7 @@ import {
   Glasses, 
   Rocket 
 } from 'lucide-react';
-// import { fadeInUp, staggerContainer } from '../../utils/animations';
+import { fadeInUp, staggerContainer } from '../utils/animations';
 
 const steps = [
   {
@@ -28,36 +28,6 @@ const steps = [
   },
 
 ];
-
-// src/utils/animations.js
-
-export const fadeInUp = {
-  hidden: {
-    opacity: 0,
-    y: 40,
-    transition: {
-      duration: 0.4,
-      ease: 'easeOut',
-    },
-  },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.6,
-      ease: 'easeOut',
-    },
-  },
-};
-
-export const staggerContainer = {
-  hidden: {},
-  visible: {
-    transition: {
-      staggerChildren: 0.2,
-    },
-  },
-};
 
 
 export default function WorkSteps() {

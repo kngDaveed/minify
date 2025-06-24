@@ -2,7 +2,7 @@ import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { useForm, ValidationError } from "@formspree/react";
 import { Mail, Phone, MapPin, Send, Rocket } from "lucide-react";
-import { fadeInLeft, fadeInRight } from "./utils/animations";
+import { fadeInLeft, fadeInRight } from "../utils/animations";
 import { Github, Linkedin, Twitter } from "lucide-react";
 
 export default function Contact() {
