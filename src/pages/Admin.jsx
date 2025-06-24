@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-// import kv from '../api/kvClient';
 import { useSearchParams, Navigate } from 'react-router-dom';
 
 function Admin() {

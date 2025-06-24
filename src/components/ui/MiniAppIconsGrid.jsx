@@ -96,13 +96,13 @@ const bounceAnim = {
 const MiniAppIconsGrid = () => {
   return (
     <div className="grid grid-cols-3 gap-4 p-4 bg-white border border-gray-200 rounded-md">
-      {iconsData.map((item, index) => (
+      {iconsData.map((item, idx) => (
         <motion.div
-          key={index}
+          key={idx}
           className="flex flex-col items-center justify-center p-2 border rounded-md shadow-sm bg-white border-gray-200"
           initial="hidden"
           animate="visible"
-          custom={index}
+          custom={idx}
           variants={bounceAnim}
         >
           <div className={`p-2 rounded-md border ${item.color}`}>

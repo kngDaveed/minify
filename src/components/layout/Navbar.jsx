@@ -24,7 +24,7 @@ const navLinks = [
     icon: <LayoutDashboard className="w-4 h-4 mr-2" />,
   },
   {
-    id: "hitory",
+    id: "history",
     name: "History",
     icon: <LayoutDashboard className="w-4 h-4 mr-2" />,
   },

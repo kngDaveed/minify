@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Minus, Plus } from 'lucide-react';
 
-export default function FAQItem({ faq, index }) {
+export default function FAQItem({ faq, idx }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleAccordion = () => {
@@ -16,7 +16,7 @@ export default function FAQItem({ faq, index }) {
       y: 0,
       transition: { 
         duration: 0.5,
-        delay: index * 0.1 
+        delay: idx * 0.1 
       }
     }
   };

@@ -1,35 +1,6 @@
-/*
-import { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { kv } from '../api/kvClient'; // make sure this is set up
-import { useNavigate } from 'react-router-dom';
-
-function RedirectPage() {
-  const { slug } = useParams();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    async function getOriginalUrl() {
-      const originalUrl = await kv.get(slug);
-      if (originalUrl) {
-        window.location.href = originalUrl;
-      } else {
-        navigate('/'); // redirect home if slug not found
-      }
-    }
-    getOriginalUrl();
-  }, [slug, navigate]);
-
-  return <p className="text-center mt-10">Redirecting...</p>;
-}
-
-export default RedirectPage;
-*/
-
 import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { useParams } from "react-router-dom";
-// import kv from "../../api/kvClient.js";
 
 function RedirectPage() {
   const { slug } = useParams();
