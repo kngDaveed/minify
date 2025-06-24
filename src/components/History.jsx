@@ -33,9 +33,9 @@ function History({ history, setHistory }) {
         )}
       </div>
 
-      {visibleLinks.map((item, index) => (
+      {visibleLinks.map((item, idx) => (
         <div
-          key={`${item.shortUrl}-${index}`}
+          key={`${item.shortUrl}-${idx}`}
           className="flex justify-between items-center border border-gray-200 rounded-md mb-2 p-2"
         >
           <div className="w-3/4">

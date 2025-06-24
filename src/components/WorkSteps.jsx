@@ -61,12 +61,12 @@ export default function WorkSteps() {
           animate={isInView ? "visible" : "hidden"}
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12"
         >
-          {steps.map((step, index) => {
+          {steps.map((step, idx) => {
             const Icon = step.icon;
             
             return (
               <motion.div
-                key={index}
+                key={idx}
                 variants={fadeInUp}
                 className="bg-white rounded-xl p-6 shadow-md border border-gray-200 hover:shadow-lg transition-all duration-300"
               >

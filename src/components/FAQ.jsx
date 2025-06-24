@@ -87,8 +87,8 @@ export default function FAQ() {
           animate={isInView ? "visible" : "hidden"}
           className="mt-12 max-w-3xl mx-auto space-y-4"
         >
-          {faqs.map((faq, index) => (
-            <FAQItem key={faq.id} faq={faq} index={index} />
+          {faqs.map((faq, idx) => (
+            <FAQItem key={faq.id} faq={faq} idx={idx} />
           ))}
         </motion.div>
       </div>

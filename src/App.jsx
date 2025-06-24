@@ -8,7 +8,7 @@ import Contact from "./components/Contact";
 import FAQ from "./components/FAQ";
 import WorkSteps from "./components/WorkSteps";
 import Footer from "./components/layout/Footer";
-import RedirectPage from "./pages/RedirectPage"; // You will create this
+import RedirectPage from "./pages/RedirectPage";
 
 function App() {
   return (

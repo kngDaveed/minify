@@ -137,11 +137,11 @@ export default function Navbar() {
             initial="hidden"
             animate="visible"
           >
-            {navLinks.map((link, index) => (
+            {navLinks.map((link, idx) => (
               <motion.div
                 key={link.id}
                 variants={itemVariants}
-                transition={{ duration: 0.3, delay: index * 0.1 }}
+                transition={{ duration: 0.3, delay: idx * 0.1 }}
               >
                 <ScrollLink
                   to={link.id}

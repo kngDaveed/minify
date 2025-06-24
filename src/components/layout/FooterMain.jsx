@@ -88,8 +88,8 @@ export default function FooterMain() {
                 "Revamping & SEO Enhancements",
                 "Hosting Web Solutions & CICD",
                 "AI-Powered Integrated Solutions",
-              ].map((service, index) => (
-                <li key={index}>
+              ].map((service, idx) => (
+                <li key={idx}>
                   <span className="text-gray-50 hover:text-white cursor-pointer transition-colors">
                     {service}
                   </span>
