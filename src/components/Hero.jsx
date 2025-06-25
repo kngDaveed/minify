@@ -33,7 +33,7 @@ const Hero = () => {
   return (
     <div
       id="home"
-      className="h-[100dvh] sm:h-[800px] lg:h-[1080px] xl:h-[750px] bg-[url(/images/web.jpg)] bg-center md:bg-top bg-cover bg-no-repeat bg-fixed flex justify-center md:items-center items-end px-4 sm:px-12"
+      className="h-[100dvh] sm:h-[800px] lg:h-[1080px] xl:h-[750px] bg-[url(/images/web.jpg)] bg-center md:bg-top bg-cover bg-no-repeat flex justify-center md:items-center items-end px-4 sm:px-12"
     >
       {/* bg-fixed or background-attachment: fixed */}
       <div className="flex flex-col gap-6 max-w-3xl text-start mb-32 md:mb-0">
