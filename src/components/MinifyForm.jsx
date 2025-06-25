@@ -21,16 +21,16 @@ function MinifyForm() {
   const handleShorten = async () => {
     setIsLoading(true);
     const response = await fetch(apiUrl, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({ url: longUrl.trim(), slug }),
     });
 
     if (!response.ok) {
       // Attempt to parse JSON error, but fallback to text if it fails
-      let errorMessage = 'An unexpected error occurred.';
+      let errorMessage = "An unexpected error occurred.";
       try {
         const errorData = await response.json();
         errorMessage = errorData.message || errorMessage;
@@ -53,6 +53,7 @@ function MinifyForm() {
     setShortUrl(data.shortUrl);
     setCopied(false);
     setLongUrl("");
+    setSlug("");
 
     const qrCode = await generateQRCode(data.shortUrl);
     setQR(qrCode);
@@ -89,7 +90,9 @@ function MinifyForm() {
           Paste your long URL below and get a short version instantly!
         </p>
 
-        <label htmlFor="long-url" className="sr-only">Long URL</label>
+        <label htmlFor="long-url" className="sr-only">
+          Long URL
+        </label>
         <input
           id="long-url"
           aria-label="Long URL"
@@ -100,7 +103,9 @@ function MinifyForm() {
           onChange={(e) => setLongUrl(e.target.value)}
         />
 
-        <label htmlFor="slug" className="sr-only">Custom Slug</label>
+        <label htmlFor="slug" className="sr-only">
+          Custom Slug
+        </label>
         <input
           id="slug"
           aria-label="Custom Slug"
@@ -115,7 +120,9 @@ function MinifyForm() {
           onClick={handleShorten}
           disabled={isLoading}
           className={`w-full border-2 border-blue-700 bg-blue-600 text-white py-[10px] rounded-full transition ${
-            isLoading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-700 hover:border-blue-900'
+            isLoading
+              ? "opacity-50 cursor-not-allowed"
+              : "hover:bg-blue-700 hover:border-blue-900"
           }`}
         >
           {isLoading ? "Processing..." : "Shorten It!"}
@@ -156,7 +163,9 @@ function MinifyForm() {
         ) : (
           <div id="minify-guide">
             <div className="bg-blue-50 p-4 rounded-md text-blue-800 text-start">
-              <h2 className="text-lg font-semibold mb-2">🚀 How to Use Minify</h2>
+              <h2 className="text-lg font-semibold mb-2">
+                🚀 How to Use Minify
+              </h2>
               <ul className="list-disc pl-5 space-y-1 text-sm">
                 <li>Paste any long URL into the input field above.</li>
                 <li>Click “Shorten It” to instantly get a short link.</li>
@@ -164,7 +173,8 @@ function MinifyForm() {
               </ul>
             </div>
             <div className="flex mt-2 p-4 rounded-md shadow-sm text-sm border border-gray-200">
-              Your shortened links will appear here for quick access as "History".
+              Your shortened links will appear here for quick access as
+              "History".
             </div>
           </div>
         )}
