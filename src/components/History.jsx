@@ -2,7 +2,9 @@ import React, { useState } from "react";
 
 function History({ history, setHistory }) {
   const [expanded, setExpanded] = useState(false);
-  const [copiedSlug, setCopiedSlug] = useState(null); // 🆕
+  const [copiedSlug, setCopiedSlug] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortOrder, setSortOrder] = useState("latest"); // latest | oldest
 
   const deleteLink = (shortUrl) => {
     const updated = history.filter((item) => item.shortUrl !== shortUrl);
@@ -13,7 +15,7 @@ function History({ history, setHistory }) {
   const copyLink = (shortUrl) => {
     navigator.clipboard.writeText(shortUrl);
     setCopiedSlug(shortUrl);
-    setTimeout(() => setCopiedSlug(null), 500); // copy to copied & Reset after 0.5s
+    setTimeout(() => setCopiedSlug(null), 500);
   };
 
   const clearHistory = () => {
@@ -21,8 +23,22 @@ function History({ history, setHistory }) {
     setHistory([]);
   };
 
-  const visibleLinks = expanded ? history : history.slice(0, 3);
-  const remaining = history.length - 3;
+  // ✅ Search + Filter Logic
+  const filteredHistory = history
+    .filter((item) => {
+      const term = searchTerm.toLowerCase();
+      return (
+        item.originalUrl.toLowerCase().includes(term) ||
+        item.shortUrl.toLowerCase().includes(term)
+      );
+    })
+    .sort((a, b) => {
+      if (sortOrder === "latest") return 0; // Already in latest order
+      return 1; // reverse for "oldest"
+    });
+
+  const visibleLinks = expanded ? filteredHistory : filteredHistory.slice(0, 3);
+  const remaining = filteredHistory.length - 3;
 
   if (history.length === 0) return null;
 
@@ -39,6 +55,29 @@ function History({ history, setHistory }) {
           </button>
         )}
       </div>
+
+      {/* 🔍 Search + Sort Controls */}
+      <div className="mb-4 flex flex-col sm:flex-row sm:items-center gap-2">
+        <input
+          type="text"
+          placeholder="Search by URL or slug..."
+          className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+        <select
+          value={sortOrder}
+          onChange={(e) => setSortOrder(e.target.value)}
+          className="px-3 py-2 border border-gray-300 rounded-md text-sm"
+        >
+          <option value="latest">Sort: Latest</option>
+          <option value="oldest">Sort: Oldest</option>
+        </select>
+      </div>
+
+      {visibleLinks.length === 0 && (
+        <p className="text-gray-500 text-sm mb-2">No matching links found.</p>
+      )}
 
       {visibleLinks.map((item, idx) => (
         <div
@@ -58,7 +97,7 @@ function History({ history, setHistory }) {
               {item.shortUrl}
             </a>
           </div>
-          <div className="flex gap-1">
+          <div className="flex flex-col gap-1">
             <button
               onClick={() => copyLink(item.shortUrl)}
               className="bg-blue-500 text-white px-3 py-1 text-xs rounded-md hover:bg-blue-600"
