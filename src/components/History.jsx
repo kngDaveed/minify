@@ -2,11 +2,18 @@ import React, { useState } from "react";
 
 function History({ history, setHistory }) {
   const [expanded, setExpanded] = useState(false);
+  const [copiedSlug, setCopiedSlug] = useState(null); // 🆕
 
   const deleteLink = (shortUrl) => {
     const updated = history.filter((item) => item.shortUrl !== shortUrl);
     setHistory(updated);
     localStorage.setItem("minifyHistory", JSON.stringify(updated));
+  };
+
+  const copyLink = (shortUrl) => {
+    navigator.clipboard.writeText(shortUrl);
+    setCopiedSlug(shortUrl);
+    setTimeout(() => setCopiedSlug(null), 500); // copy to copied & Reset after 0.5s
   };
 
   const clearHistory = () => {
@@ -51,12 +58,20 @@ function History({ history, setHistory }) {
               {item.shortUrl}
             </a>
           </div>
-          <button
-            onClick={() => deleteLink(item.shortUrl)}
-            className="bg-red-500 text-white px-4 py-3 rounded-md hover:bg-red-600 transition text-xs ml-2"
-          >
-            Delete
-          </button>
+          <div className="flex gap-1">
+            <button
+              onClick={() => copyLink(item.shortUrl)}
+              className="bg-blue-500 text-white px-3 py-1 text-xs rounded-md hover:bg-blue-600"
+            >
+              {copiedSlug === item.shortUrl ? "Copied!" : "Copy"}
+            </button>
+            <button
+              onClick={() => deleteLink(item.shortUrl)}
+              className="bg-red-500 text-white px-3 py-1 text-xs rounded-md hover:bg-red-600"
+            >
+              Delete
+            </button>
+          </div>
         </div>
       ))}
 
