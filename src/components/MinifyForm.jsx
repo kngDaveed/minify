@@ -124,7 +124,7 @@ function MinifyForm() {
         {shortUrl && (
           <div className="mt-6">
             <p className="text-green-600 font-medium">✅ Your shortened URL:</p>
-            <div className="flex flex-col gap-2 items-center">
+            <div className="flex flex-col md:flex-row gap-2 md:gap-4 items-center">
               <div className="flex items-center justify-between gap-1 bg-blue-50 rounded-md p-3 mt-2">
                 <a
                   href={shortUrl}
