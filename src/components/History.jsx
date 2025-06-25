@@ -23,8 +23,7 @@ function History({ history, setHistory }) {
     setHistory([]);
   };
 
-  // ✅ Search + Filter Logic
-  const filteredHistory = history
+  const filteredHistory = [...history]
     .filter((item) => {
       const term = searchTerm.toLowerCase();
       return (
@@ -33,8 +32,9 @@ function History({ history, setHistory }) {
       );
     })
     .sort((a, b) => {
-      if (sortOrder === "latest") return 0; // Already in latest order
-      return 1; // reverse for "oldest"
+      const aTime = new Date(a.createdAt || 0).getTime();
+      const bTime = new Date(b.createdAt || 0).getTime();
+      return sortOrder === "latest" ? bTime - aTime : aTime - bTime;
     });
 
   const visibleLinks = expanded ? filteredHistory : filteredHistory.slice(0, 3);
@@ -85,9 +85,7 @@ function History({ history, setHistory }) {
           className="flex justify-between items-center border border-gray-200 rounded-md mb-2 p-2"
         >
           <div className="w-3/4">
-            <p className="truncate text-sm text-gray-700">
-              {item.originalUrl}
-            </p>
+            <p className="truncate text-sm text-gray-700">{item.originalUrl}</p>
             <a
               href={item.shortUrl}
               target="_blank"

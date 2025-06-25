@@ -19,57 +19,62 @@ function MinifyForm() {
   }, []);
 
   const handleShorten = async () => {
-    setIsLoading(true);
-    const response = await fetch(apiUrl, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ url: longUrl.trim(), slug }),
-    });
+  setIsLoading(true);
+  const response = await fetch(apiUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ url: longUrl.trim(), slug }),
+  });
 
-    if (!response.ok) {
-      // Attempt to parse JSON error, but fallback to text if it fails
-      let errorMessage = "An unexpected error occurred.";
-      try {
-        const errorData = await response.json();
-        errorMessage = errorData.message || errorMessage;
-      } catch (e) {
-        errorMessage = await response.text(); // Get raw text if not JSON
-      }
-
-      if (response.status === 409) {
-        alert(`Slug already taken: ${errorMessage}. Please choose another.`);
-      } else {
-        alert(`Error: ${response.status} - ${errorMessage}`);
-      }
-      setIsLoading(false);
-      return;
-    }
-    const data = await response.json();
-    console.log("Sent body:", { url: longUrl });
-    console.log("Received data:", data);
-
-    setShortUrl(data.shortUrl);
-    setCopied(false);
-    setLongUrl("");
-    setSlug("");
-
-    const qrCode = await generateQRCode(data.shortUrl);
-    setQR(qrCode);
-
-    const exists = history.find((item) => item.shortUrl === data.shortUrl);
-    if (!exists) {
-      const updatedHistory = [
-        { shortUrl: data.shortUrl, originalUrl: longUrl },
-        ...history,
-      ];
-      setHistory(updatedHistory);
-      localStorage.setItem("minifyHistory", JSON.stringify(updatedHistory));
+  if (!response.ok) {
+    let errorMessage = "An unexpected error occurred.";
+    try {
+      const errorData = await response.json();
+      errorMessage = errorData.message || errorMessage;
+    } catch (e) {
+      errorMessage = await response.text();
     }
 
+    if (response.status === 409) {
+      alert(`Slug already taken: ${errorMessage}. Please choose another.`);
+    } else {
+      alert(`Error: ${response.status} - ${errorMessage}`);
+    }
     setIsLoading(false);
-  };
+    return;
+  }
+
+  const data = await response.json();
+  console.log("Sent body:", { url: longUrl });
+  console.log("Received data:", data);
+
+  setShortUrl(data.shortUrl);
+  setCopied(false);
+  setLongUrl("");
+  setSlug("");
+
+  const qrCode = await generateQRCode(data.shortUrl);
+  setQR(qrCode);
+
+  const exists = history.find((item) => item.shortUrl === data.shortUrl);
+  if (!exists) {
+    const updatedHistory = [
+      {
+        shortUrl: data.shortUrl,
+        originalUrl: longUrl,
+        createdAt: new Date().toISOString(),
+      },
+      ...history,
+    ];
+    setHistory(updatedHistory);
+    localStorage.setItem("minifyHistory", JSON.stringify(updatedHistory));
+  }
+
+  setIsLoading(false);
+};
+
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(shortUrl);

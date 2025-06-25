@@ -1,19 +1,22 @@
+// /api/preview.js
 import kv from './kvClient.js';
+import ogs from 'open-graph-scraper';
 
 export default async function handler(req, res) {
   const { slug } = req.query;
 
   try {
     const meta = await kv.hgetall(`link:${slug}`);
-    if (!meta?.url) {
-      return res.status(404).send("Short URL not found");
-    }
+    if (!meta?.url) return res.status(404).send("Short URL not found");
 
-    const ogTitle = meta.title || "Minify - free URL shortener";
-    const ogDesc = meta.description || "Reduced stress, cleaner communication & sharing to boost conversion.";
-    const ogImage = meta.image || "https://miniphy.vercel.app/meta-default.png";
+    // Attempt OG scrape from the destination URL
+    const ogResult = await ogs({ url: meta.url });
+    const og = ogResult?.result || {};
 
-    // Serve server-side rendered OG-friendly HTML
+    const ogTitle = og.ogTitle || meta.title || "Minify - free URL shortener";
+    const ogDesc = og.ogDescription || meta.description || "Reduced stress, cleaner communication & sharing to boost conversion.";
+    const ogImage = og.ogImage?.url || meta.image || "https://miniphy.vercel.app/meta-default.png";
+
     res.setHeader("Content-Type", "text/html");
     return res.status(200).send(`
       <!DOCTYPE html>
@@ -28,9 +31,7 @@ export default async function handler(req, res) {
         <meta name="twitter:card" content="summary_large_image" />
         <title>${ogTitle}</title>
         <script>
-          setTimeout(() => {
-            window.location.href = "${meta.url}";
-          }, 1500);
+          window.location.href = "${meta.url}";
         </script>
       </head>
       <body>
