@@ -50,17 +50,17 @@ function MinifyForm() {
     console.log("Sent body:", { url: longUrl });
     console.log("Received data:", data);
 
-    setShortUrl(data.result_url);
+    setShortUrl(data.shortUrl);
     setCopied(false);
     setLongUrl("");
 
-    const qrCode = await generateQRCode(data.result_url);
+    const qrCode = await generateQRCode(data.shortUrl);
     setQR(qrCode);
 
-    const exists = history.find((item) => item.shortUrl === data.result_url);
+    const exists = history.find((item) => item.shortUrl === data.shortUrl);
     if (!exists) {
       const updatedHistory = [
-        { shortUrl: data.result_url, originalUrl: longUrl },
+        { shortUrl: data.shortUrl, originalUrl: longUrl },
         ...history,
       ];
       setHistory(updatedHistory);
