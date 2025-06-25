@@ -76,12 +76,12 @@ function MinifyForm() {
   };
 
   return (
-    <div
+    <section
       id="minify"
       className="flex flex-col lg:flex-row items-start justify-center py-12 px-4 bg-white gap-8 md:gap-12"
     >
       {/* Left column: Form */}
-      <div className="bg-white shadow-md border border-gray-200 rounded-xl p-4 md:p-8 w-full max-w-xl">
+      <div className="bg-white shadow-sm border border-gray-100 rounded-xl p-4 md:p-8 w-full max-w-xl mx-auto">
         <h1 className="text-xl md:text-2xl font-bold mb-4 text-blue-800">
           Minify Your Long URL
         </h1>
@@ -148,7 +148,7 @@ function MinifyForm() {
       </div>
 
       {/* Right column: History or Guide */}
-      <div className="text-center w-full max-w-md">
+      <div className="text-center w-full sm:max-w-md sm:mx-auto xl:max-w-md">
         {history.length > 0 ? (
           <div id="history">
             <History history={history} setHistory={setHistory} />
@@ -169,7 +169,7 @@ function MinifyForm() {
           </div>
         )}
       </div>
-    </div>
+    </section>
   );
 }
 

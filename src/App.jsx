@@ -9,6 +9,9 @@ import FAQ from "./components/FAQ";
 import WorkSteps from "./components/WorkSteps";
 import Footer from "./components/layout/Footer";
 import RedirectPage from "./pages/RedirectPage";
+import "./App.css";
+
+
 
 function App() {
   return (
