@@ -11,17 +11,32 @@ function RedirectPage() {
   // setMeta(data);
   useEffect(() => {
     (async () => {
-      const res = await fetch(`/api/get-meta?slug=${slug}`);
-      const { meta } = await res.json();
-
-      if (!meta?.url) {
+      let metaData = null;
+      try {
+        const res = await fetch(`/api/get-meta?slug=${slug}`);
+        if (!res.ok) {
+          // Handle non-OK responses (e.g., 404, 500)
+          console.error(`Failed to fetch meta for slug ${slug}: ${res.status} ${res.statusText}`);
+          setMeta({ url: "/", title: "Error", description: "Could not load link details." });
+          return;
+        }
+        const data = await res.json();
+        metaData = data.meta;
+      } catch (error) {
+        console.error("Error fetching meta data:", error);
+        // Fallback for network errors or JSON parsing errors
         setMeta({ url: "/", title: "Not found" });
         return;
       }
 
-      setMeta(meta);
+      if (!metaData?.url) { // Check the fetched metaData
+        setMeta({ url: "/", title: "Not found" });
+        return;
+      }
+
+      setMeta(metaData); // Use metaData here
       setTimeout(() => {
-        window.location.href = meta.url;
+        window.location.href = metaData.url;
       }, 1500);
     })();
   }, [slug]);

@@ -21,19 +21,31 @@ function MinifyForm() {
   const handleShorten = async () => {
     setIsLoading(true);
     const response = await fetch(apiUrl, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({ url: longUrl.trim(), slug }),
     });
 
-    if (response.status === 409) {
-      alert("Slug already taken. Please choose another.");
+    if (!response.ok) {
+      // Attempt to parse JSON error, but fallback to text if it fails
+      let errorMessage = 'An unexpected error occurred.';
+      try {
+        const errorData = await response.json();
+        errorMessage = errorData.message || errorMessage;
+      } catch (e) {
+        errorMessage = await response.text(); // Get raw text if not JSON
+      }
+
+      if (response.status === 409) {
+        alert(`Slug already taken: ${errorMessage}. Please choose another.`);
+      } else {
+        alert(`Error: ${response.status} - ${errorMessage}`);
+      }
       setIsLoading(false);
       return;
     }
-
     const data = await response.json();
     console.log("Sent body:", { url: longUrl });
     console.log("Received data:", data);
