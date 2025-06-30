@@ -6,51 +6,55 @@ function RedirectPage() {
   const { slug } = useParams();
   const [meta, setMeta] = useState(null);
 
-  // Track click count
-  // await kv.incr(`clicks:${slug}`);
-  // setMeta(data);
   useEffect(() => {
     (async () => {
-      let metaData = null;
       try {
         const res = await fetch(`/api/get-meta?slug=${slug}`);
         if (!res.ok) {
-          // Handle non-OK responses (e.g., 404, 500)
-          console.error(`Failed to fetch meta for slug ${slug}: ${res.status} ${res.statusText}`);
-          setMeta({ url: "/", title: "Error", description: "Could not load link details." });
+          console.error(`Failed to fetch meta: ${res.status}`);
+          setMeta({
+            url: "/",
+            title: "Invalid Link",
+            description: "Could not load preview metadata.",
+            image: "https://miniphy.vercel.app/meta-default.png",
+          });
           return;
         }
+
         const data = await res.json();
-        metaData = data.meta;
+        const metaData = data.meta;
+
+        if (!metaData?.url) {
+          setMeta({
+            url: "/",
+            title: "Not Found",
+            description: "Link metadata missing.",
+            image: "https://miniphy.vercel.app/meta-default.png",
+          });
+          return;
+        }
+
+        setMeta(metaData);
+
+        // Optional click tracking
+        // await fetch(`/api/increment-click?slug=${slug}`, { method: 'POST' });
+
+        setTimeout(() => {
+          window.location.href = metaData.url;
+        }, 1500);
       } catch (error) {
-        console.error("Error fetching meta data:", error);
-        // Fallback for network errors or JSON parsing errors
-        setMeta({ url: "/", title: "Not found" });
-        return;
+        console.error("Meta fetch error:", error);
+        setMeta({
+          url: "/",
+          title: "Error",
+          description: "Server error while fetching preview.",
+          image: "https://miniphy.vercel.app/meta-default.png",
+        });
       }
-
-      if (!metaData?.url) { // Check the fetched metaData
-        setMeta({ url: "/", title: "Not found" });
-        return;
-      }
-
-      setMeta(metaData); // Use metaData here
-      setTimeout(() => {
-        window.location.href = metaData.url;
-      }, 1500);
     })();
   }, [slug]);
 
-  /* 
-  // Fast redirect after slight SEO delay
-      setTimeout(() => {
-        window.location.replace(data.url);
-      }, 1500);
-    })();
-  }, [slug]);
-  */
-
-  if (!meta) return <p className="text-center mt-10">Loading...</p>;
+  if (!meta) return <p className="text-center mt-10">Loading preview...</p>;
 
   return (
     <>
@@ -58,7 +62,12 @@ function RedirectPage() {
         <title>{meta.title || "Redirecting..."}</title>
         <meta property="og:title" content={meta.title} />
         <meta property="og:description" content={meta.description} />
-        <meta property="og:image" content={meta.image} />
+        <meta property="og:image" content={meta.image || "https://miniphy.vercel.app/meta-default.png"} />
+        <meta property="og:url" content={`https://miniphy.vercel.app/m/${slug}`} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={meta.title} />
+        <meta name="twitter:description" content={meta.description} />
+        <meta name="twitter:image" content={meta.image} />
         <meta httpEquiv="refresh" content={`1.5;url=${meta.url}`} />
       </Helmet>
       <div className="min-h-screen flex items-center justify-center text-blue-700 font-semibold">

@@ -12,22 +12,65 @@ function MinifyForm() {
   const [qr, setQR] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [mode, setMode] = useState("quick"); // "quick" or "custom"
-  const [metaPreview, setMetaPreview] = useState(null);
+  const [metaPreview, setMetaPreview] = useState({
+    title: "",
+    description: "",
+    image: "",
+  });
 
-  const apiUrl = mode === "quick" ? "/api/auto-shorten" : "/api/shorten";
+  const apiUrl = mode === "quick" ? "/api/shorten" : "/api/shorten";
 
   useEffect(() => {
     const stored = localStorage.getItem("minifyHistory");
     if (stored) setHistory(JSON.parse(stored));
   }, []);
 
+  const handleImageUpload = async (file) => {
+    if (!file.type.startsWith("image/")) {
+      alert("Please upload a valid image file (JPG, PNG, WebP, etc).");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "MinifyApp"); // your unsigned Cloudinary preset
+
+    try {
+      const res = await fetch("https://api.cloudinary.com/v1_1/dw5n8z3pw/image/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!res.ok) throw new Error("Upload failed");
+
+      const data = await res.json();
+      setMetaPreview((prev) => ({ ...prev, image: data.secure_url }));
+    } catch (error) {
+      console.error("Error uploading image to Cloudinary:", error);
+      alert("Image upload failed. Please try again.");
+    }
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    if (e.dataTransfer.files?.[0]) {
+      handleImageUpload(e.dataTransfer.files[0]);
+    }
+  };
+
   const handleShorten = async () => {
     setIsLoading(true);
-    setMetaPreview(null);
     setShortUrl("");
-    setQR("");
+    setCopied(false);
 
-    const body = { url: longUrl.trim(), slug: slug.trim() };
+    const body = {
+      url: longUrl.trim(),
+      slug: mode === "custom" ? slug.trim() : undefined,
+      title: mode === "custom" ? metaPreview.title : "",
+      description: mode === "custom" ? metaPreview.description : "",
+      image: mode === "custom" ? metaPreview.image : "",
+    };
+
     const response = await fetch(apiUrl, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -41,37 +84,22 @@ function MinifyForm() {
       return;
     }
 
-    if (mode === "quick" && data.meta?.failed) {
-      setMetaPreview({ failed: true });
-      setShortUrl("");
-      setQR("");
-      setIsLoading(false);
-      return;
-    }
-
     setShortUrl(data.shortUrl);
     setCopied(false);
     setLongUrl("");
     setSlug("");
-    setMetaPreview(data.meta || null);
+    setQR(await generateQRCode(data.shortUrl));
 
-    const qrCode = await generateQRCode(data.shortUrl);
-    setQR(qrCode);
-
-    const exists = history.find((item) => item.shortUrl === data.shortUrl);
-    if (!exists) {
-      const updatedHistory = [
-        {
-          shortUrl: data.shortUrl,
-          originalUrl: longUrl,
-          createdAt: new Date().toISOString(),
-        },
-        ...history,
-      ];
-      setHistory(updatedHistory);
-      localStorage.setItem("minifyHistory", JSON.stringify(updatedHistory));
-    }
-
+    const updatedHistory = [
+      {
+        shortUrl: data.shortUrl,
+        originalUrl: longUrl,
+        createdAt: new Date().toISOString(),
+      },
+      ...history,
+    ];
+    setHistory(updatedHistory);
+    localStorage.setItem("minifyHistory", JSON.stringify(updatedHistory));
     setIsLoading(false);
   };
 
@@ -123,13 +151,59 @@ function MinifyForm() {
         />
 
         {mode === "custom" && (
-          <input
-            type="text"
-            className="w-full px-5 py-3 border border-gray-200 rounded-full mb-4"
-            placeholder="Optional custom slug (e.g. daniel)"
-            value={slug}
-            onChange={(e) => setSlug(e.target.value)}
-          />
+          <>
+            <input
+              type="text"
+              className="w-full px-5 py-3 border border-gray-200 rounded-full mb-4"
+              placeholder="Optional custom slug (e.g. daniel)"
+              value={slug}
+              onChange={(e) => setSlug(e.target.value)}
+            />
+
+            <input
+              type="text"
+              className="w-full px-5 py-3 border border-gray-200 rounded-full mb-4"
+              placeholder="Custom title"
+              value={metaPreview.title}
+              onChange={(e) => setMetaPreview((prev) => ({ ...prev, title: e.target.value }))}
+            />
+
+            <textarea
+              rows={3}
+              className="w-full px-5 py-3 border border-gray-200 rounded-md mb-4"
+              placeholder="Custom description"
+              value={metaPreview.description}
+              onChange={(e) => setMetaPreview((prev) => ({ ...prev, description: e.target.value }))}
+            />
+
+            {/* Drag + Drop upload box */}
+            <input
+              type="file"
+              accept="image/*"
+              hidden
+              id="upload-image"
+              onChange={(e) => {
+                if (e.target.files?.[0]) handleImageUpload(e.target.files[0]);
+              }}
+            />
+            <label htmlFor="upload-image" className="cursor-pointer block">
+              <div
+                className="w-full border border-dashed border-gray-300 rounded-md py-6 text-center mb-4 hover:border-blue-400"
+                onDrop={handleDrop}
+                onDragOver={(e) => e.preventDefault()}
+              >
+                {metaPreview.image ? (
+                  <img
+                    src={metaPreview.image}
+                    alt="Uploaded"
+                    className="w-32 h-32 object-cover mx-auto rounded"
+                  />
+                ) : (
+                  <p className="text-gray-500">Drag & drop or click to upload image</p>
+                )}
+              </div>
+            </label>
+          </>
         )}
 
         <button
@@ -144,29 +218,13 @@ function MinifyForm() {
           {isLoading ? "Processing..." : "Shorten It!"}
         </button>
 
-        {/* Metadata Preview */}
-        {metaPreview && !metaPreview.failed && (
+        {metaPreview && (metaPreview.title || metaPreview.description || metaPreview.image) && (
           <div className="mt-6">
             <PreviewCard meta={metaPreview} />
           </div>
         )}
 
-        {/* Scrape fallback warning */}
-        {metaPreview?.failed && (
-          <div className="mt-4 bg-yellow-100 text-yellow-800 px-4 py-3 rounded-md border border-yellow-300">
-            ⚠️ We couldn't fetch metadata for this link. You can switch to
-            <button
-              className="text-blue-600 underline ml-1"
-              onClick={() => setMode("custom")}
-            >
-              custom mode
-            </button>
-            to provide your own title, image, and description.
-          </div>
-        )}
-
-        {/* Success Output */}
-        {shortUrl && !metaPreview?.failed && (
+        {shortUrl && (
           <div className="mt-6">
             <p className="text-green-600 font-medium">✅ Your shortened URL:</p>
             <div className="flex flex-col md:flex-row gap-2 md:gap-4 items-center">
@@ -201,18 +259,16 @@ function MinifyForm() {
         ) : (
           <div id="minify-guide">
             <div className="bg-blue-50 p-4 rounded-md text-blue-800 text-start">
-              <h2 className="text-lg font-semibold mb-2">
-                🚀 How to Use Minify
-              </h2>
+              <h2 className="text-lg font-semibold mb-2">🚀 How to Use Minify</h2>
               <ul className="list-disc pl-5 space-y-1 text-sm">
                 <li>Paste any long URL into the input field above.</li>
                 <li>Choose quick or custom mode.</li>
+                <li>Upload custom preview data (optional).</li>
                 <li>Click “Shorten It” to get a short link + preview.</li>
               </ul>
             </div>
             <div className="flex mt-2 p-4 rounded-md shadow-sm text-sm border border-gray-200">
-              Your shortened links will appear here for quick access as
-              "History".
+              Your shortened links will appear here as "History".
             </div>
           </div>
         )}

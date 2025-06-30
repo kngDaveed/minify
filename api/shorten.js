@@ -1,21 +1,30 @@
-import kv from './kvClient.js';
-import { nanoid } from 'nanoid';
+// /api/shorten.js
+import kv from "./kvClient";
+import { nanoid } from "nanoid";
 
 export default async function handler(req, res) {
-  if (req.method !== 'POST') return res.status(405).json({ error: 'Only POST requests allowed' });
+  if (req.method !== "POST") {
+    return res.status(405).send("Method Not Allowed");
+  }
 
-  const { url, slug: customSlug, title, description, image } = req.body;
-  if (!url) return res.status(400).json({ error: 'Missing URL' });
+  const { url, slug, title, description, image } = req.body;
 
-  const slug = customSlug?.trim() || nanoid(6);
-  const exists = await kv.exists(`link:${slug}`);
-  if (exists) return res.status(409).json({ error: 'Slug already in use' });
+  if (!url || !url.startsWith("http")) {
+    return res.status(400).json({ message: "Invalid URL" });
+  }
 
-  const record = { url, title: title || '', description: description || '', image: image || '' };
-  await kv.hset(`link:${slug}`, record);
-  await kv.lpush('links', slug); // For admin analytics
+  const newSlug = slug?.trim() || nanoid(6);
 
-  const host = req.headers.host;
-  const protocol = req.headers['x-forwarded-proto'] || 'https';
-  return res.status(200).json({ shortUrl: `${protocol}://${host}/m/${slug}` });
+  await kv.hset(`link:${newSlug}`, {
+    url,
+    title: title?.trim() || "Untitled Page",
+    description: description?.trim() || "No description provided.",
+    image: image || "https://miniphy.vercel.app/meta-default.png",
+    createdAt: new Date().toISOString(),
+  });
+
+  return res.status(200).json({
+    slug: newSlug,
+    shortUrl: `https://miniphy.vercel.app/m/${newSlug}`,
+  });
 }
