@@ -6,7 +6,10 @@ import {
   Code, 
   Hammer, 
   Glasses, 
-  Rocket 
+  Rocket, 
+  GalleryHorizontal,
+  QrCode,
+  Copy
 } from 'lucide-react';
 import { fadeInUp, staggerContainer } from '../utils/animations';
 
@@ -22,7 +25,22 @@ const steps = [
     description: "The system pings your long URL as you get a shorter version that redirects to it when clicked."
   },
   {
-    icon: Glasses,
+    icon: GalleryHorizontal,
+    title: "Preview Card",
+    description: "This shows what your link would look like, using the scraped metadata."
+  },
+  {
+    icon:  Glasses,
+    title: "Custom Features",
+    description: "Create custom preview data for your links for enhanced user experience & conversion."
+  },
+  {
+    icon: QrCode,
+    title: "Upload Thumbnail or image url so the right data is displayed on preview before sharing",
+    description: "Use QR"
+  },
+  {
+    icon: Copy,
     title: "Copy Shortened Link",
     description: "Copy your new short link with one click and share it anywhere—messaging apps, emails, or social media."
   },

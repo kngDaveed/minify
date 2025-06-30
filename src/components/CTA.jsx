@@ -1,4 +1,4 @@
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, GalleryHorizontal } from "lucide-react";
 import React from "react";
 import { Link as ScrollLink } from "react-scroll";
 import { QrCode, Edit3, BarChart, Clock } from "lucide-react";
@@ -56,7 +56,7 @@ const CTA = () => {
             {/* Expire Links */}
             <li className="flex items-start gap-2 md:gap-4 p-4 bg-white border border-gray-200 rounded-lg">
               <div className="p-2 bg-red-50 border border-red-200 rounded-md text-red-700">
-                <Clock size={20} />
+                <GalleryHorizontal size={20} />
               </div>
               <div className="text-sm text-gray-700">
                 <p className="font-medium">Preview Cards</p>
