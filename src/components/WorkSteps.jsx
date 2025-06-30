@@ -36,8 +36,8 @@ const steps = [
   },
   {
     icon: QrCode,
-    title: "Upload Thumbnail or image url so the right data is displayed on preview before sharing",
-    description: "Use QR"
+    title: "Upload Thumbnail or image url",
+    description: "Custom thumbnail or image url so the right data is displayed on preview before sharing"
   },
   {
     icon: Copy,
