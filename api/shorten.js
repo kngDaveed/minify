@@ -17,5 +17,5 @@ export default async function handler(req, res) {
 
   const host = req.headers.host;
   const protocol = req.headers['x-forwarded-proto'] || 'https';
-  return res.status(200).json({ shortUrl: `${protocol}://${host}/p/${slug}` });
+  return res.status(200).json({ shortUrl: `${protocol}://${host}/m/${slug}` });
 }

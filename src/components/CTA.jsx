@@ -8,25 +8,12 @@ const CTA = () => {
   return (
     <section
       id="cta"
-      className="py-20 px-4 md:px-12 relative text-center bg-[#FFBE00]"
+      className="py-10 lg:py-20 px-4 md:px-12 relative text-center bg-[#FFBE00]"
     >
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 items-center gap-6 md:gap-0">
+      <div className="grid grid-cols-1 lg:grid-cols-2 items-center gap-6">
         <div className="flex flex-col text-start gap-2 md:px-4">
-          <div className="flex items-center gap-4">
-            <img
-            src="/icons/firework.gif"
-            alt="Extended features Coming soon"
-            className=" w-10 rounded-md shadow-lg"
-          />
-          <div>
-            <h1 className=" text-xl sm:text-lg lg:text-xl font-bold text-white text-shadow-lg/20">
-            Extended Features Updates
-          </h1>
-          <p className="text-sm text-white text-shadow-lg/20">QR Code, Custom Slugs, Click Analysis</p>
-          </div>
-          </div>
 
-          <ul className="grid gap-4 mt-4">
+          <ul className="grid gap-4 mt-4 mb-2">
             {/* QR Code */}
             <li className="flex items-start gap-2 md:gap-4 p-4 bg-white border border-gray-200 rounded-lg">
               <div className="p-2 bg-blue-50 border border-blue-200 rounded-md text-blue-700">
@@ -72,56 +59,77 @@ const CTA = () => {
                 <Clock size={20} />
               </div>
               <div className="text-sm text-gray-700">
-                <p className="font-medium">Link Expiration</p>
+                <p className="font-medium">Preview Cards</p>
                 <p className="text-xs">
-                  Set time-based expiry for links—automatically deactivate after
-                  a period.
+                  See the metadata available for shortened links
                 </p>
               </div>
             </li>
+            {/* <li className="flex items-start gap-2 md:gap-4 p-4 bg-white border border-gray-200 rounded-lg">
+              <div className="p-2 bg-red-50 border border-red-200 rounded-md text-red-700">
+                <Clock size={20} />
+              </div>
+              <div className="text-sm text-gray-700">
+                <p className="font-medium">Link Expiration</p>
+                <p className="text-xs">
+                  Set time-based expiry for links—automatically deactivate.
+                </p>
+              </div>
+            </li> */}
           </ul>
-        </div>
-        <div className="flex flex-col gap-4 justify-center items-center">
-          <img
-            src="/images/minify-developer-profile.png"
-            alt="developers linkedin profile image"
-            className="md:w-[250px] md:mb-0 mb-8"
-          />
-            <a
-              href="https://techbygodfrey.vercel.app/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-max md:max-w-lg mx-auto border-2 border-blue-800 bg-blue-700 py-3 px-10 rounded-md text-white hover:bg-blue-800 font-medium hover:border-blue-900 transition-all duration-300 flex items-center gap-2 justify-center cursor-pointer"
-            >
-              Developers Portfolio <ArrowUpRight size={16} />
-            </a>
-            <ScrollLink
-              to="contact"
-              spy={true}
-              smooth={true}
-              offset={-100}
-              duration={500}
-              className="w-max md:max-w-lg mx-auto border-2 border-white py-3 px-16 rounded-md bg-white text-blue-800 hover:text-white hover:bg-[#fdc959e8] font-medium hover:border-transparent transition-all duration-300 flex items-center gap-2 justify-center cursor-pointer xl:hidden"
-            >
-              Stay Updated <ArrowUpRight size={16} />
-            </ScrollLink>
-        </div>
-          <div className="gap-4 hidden xl:flex w-max mx-auto flex-col justify-center md:gap-4 mt-4 md:mt-0">
-           
-            <MiniAppIconsGrid />
 
-             <ScrollLink
-              to="contact"
-              spy={true}
-              smooth={true}
-              offset={-100}
-              duration={500}
-              className="w-max md:max-w-lg mx-auto border-2 border-white py-3 px-16 rounded-md bg-white text-blue-800 hover:text-white hover:bg-[#fdc959e8] font-medium hover:border-transparent transition-all duration-300 flex items-center gap-2 justify-center cursor-pointer"
-            >
-              Stay Updated <ArrowUpRight size={16} />
-            </ScrollLink>
+          <MiniAppIconsGrid />
+        </div>
+        {/* <div className="gap-4 hidden xl:flex w-max mx-auto flex-col justify-center md:gap-4 mt-4 md:mt-0">
+          
+
+          <ScrollLink
+            to="contact"
+            spy={true}
+            smooth={true}
+            offset={-100}
+            duration={500}
+            className="w-max md:max-w-lg mx-auto border-2 border-white py-3 px-16 rounded-md bg-white text-blue-800 hover:text-white hover:bg-[#fdc959e8] font-medium hover:border-transparent transition-all duration-300 hidden items-center gap-2 justify-center cursor-pointer "
+          >
+            Stay Updated <ArrowUpRight size={16} />
+          </ScrollLink>
+        </div> */}
+        <div className="flex flex-col gap-4 justify-center items-center">
+          <div className="flex items-center gap-4">
+            
+            <div>
+              <h1 className=" text-2xl sm:text-lg lg:text-xl font-bold text-white text-shadow-lg/20">
+              Extended Features Updates
+              </h1>
+              <p className="text-white text-shadow-lg/30">
+                QR Code, Custom Metadata, Custom url, Click Analysis, Meta PreviewCard if valid! Fallback to custom when not valid.
+              </p>
+            </div>
           </div>
-      
+          <ScrollLink
+            to="contact"
+            spy={true}
+            smooth={true}
+            offset={-100}
+            duration={500}
+            className="w-max md:max-w-lg mx-auto border-2 border-white py-3 px-16 rounded-md bg-white text-blue-800 hover:text-white hover:bg-[#fdc959e8] font-medium hover:border-transparent transition-all duration-300 flex items-center gap-2 justify-center cursor-pointer"
+          >
+            Stay Updated <ArrowUpRight size={16} />
+          </ScrollLink>
+          <img
+            src="/images/Developers-reason.jpg"
+            alt="developers linkedin profile image"
+            className="md:w-[450px] md:mb-0 mb-8"
+          />
+          <a
+            href="https://techbygodfrey.vercel.app/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-max md:max-w-lg mx-auto border-2 border-blue-800 bg-blue-700 py-3 px-10 rounded-md text-white hover:bg-blue-800 font-medium hover:border-blue-900 transition-all duration-300 flex items-center gap-2 justify-center cursor-pointer"
+          >
+            Developers Portfolio <ArrowUpRight size={16} />
+          </a>
+        </div>
       </div>
     </section>
   );

@@ -14,7 +14,7 @@ export default async function handler(req, res) {
     const og = ogResult?.result || {};
 
     const ogTitle = og.ogTitle || meta.title || "Minify - free URL shortener";
-    const ogDesc = og.ogDescription || meta.description || "Reduced stress, cleaner communication & sharing to boost conversion.";
+    const ogDesc = og.ogDescription || meta.description || "Cleaner communication to boost conversion.";
     const ogImage = og.ogImage?.url || meta.image || "https://miniphy.vercel.app/meta-default.png";
 
     res.setHeader("Content-Type", "text/html");
@@ -27,7 +27,7 @@ export default async function handler(req, res) {
         <meta property="og:title" content="${ogTitle}" />
         <meta property="og:description" content="${ogDesc}" />
         <meta property="og:image" content="${ogImage}" />
-        <meta property="og:url" content="https://miniphy.vercel.app/p/${slug}" />
+        <meta property="og:url" content="https://miniphy.vercel.app/m/${slug}" />
         <meta name="twitter:card" content="summary_large_image" />
         <title>${ogTitle}</title>
         <script>

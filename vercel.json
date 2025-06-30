@@ -1,7 +1,7 @@
 {
   "rewrites": [
     {
-      "source": "/p/:slug",
+      "source": "/m/:slug",
       "destination": "/api/preview?slug=:slug"
     },
     {
