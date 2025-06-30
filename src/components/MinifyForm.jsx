@@ -24,8 +24,10 @@ function MinifyForm() {
   const handleShorten = async () => {
     setIsLoading(true);
     setMetaPreview(null);
+    setShortUrl("");
+    setQR("");
 
-    const body = { url: longUrl.trim(), slug };
+    const body = { url: longUrl.trim(), slug: slug.trim() };
     const response = await fetch(apiUrl, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -39,8 +41,10 @@ function MinifyForm() {
       return;
     }
 
-    if (mode === "quick" && !data.meta?.title) {
+    if (mode === "quick" && data.meta?.failed) {
       setMetaPreview({ failed: true });
+      setShortUrl("");
+      setQR("");
       setIsLoading(false);
       return;
     }
@@ -141,9 +145,23 @@ function MinifyForm() {
         </button>
 
         {/* Metadata Preview */}
-        {metaPreview && (
+        {metaPreview && !metaPreview.failed && (
           <div className="mt-6">
             <PreviewCard meta={metaPreview} />
+          </div>
+        )}
+
+        {/* Scrape fallback warning */}
+        {metaPreview?.failed && (
+          <div className="mt-4 bg-yellow-100 text-yellow-800 px-4 py-3 rounded-md border border-yellow-300">
+            ⚠️ We couldn't fetch metadata for this link. You can switch to
+            <button
+              className="text-blue-600 underline ml-1"
+              onClick={() => setMode("custom")}
+            >
+              custom mode
+            </button>
+            to provide your own title, image, and description.
           </div>
         )}
 
